@@ -82,7 +82,7 @@
     </main>
 
     <script>
-      const endpoint = "YOUR_APPS_SCRIPT_URL"; // fx https://script.google.com/macros/s/AKfycb.../exec
+      const endpoint = "https://script.google.com/macros/s/AKfycbzV7vs7T0N5MFDRkziwvJRnRD48Kl9Srf06SErBQzgDv6JxBTtwbiIxuDXkco_PGFTd/exec"; // fx https://script.google.com/macros/s/AKfycb.../exec
       const msg = document.getElementById("msg");
       const show = (t, ok=true) => msg.innerHTML = `<div class="${ok?'ok':'err'} msg">${t}</div>`;
 
@@ -117,4 +117,5 @@
       document.getElementById("resetBtn").onclick = () => send("nulstil");
     </script>
   </body>
+
 </html>
