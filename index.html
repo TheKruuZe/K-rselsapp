@@ -82,43 +82,51 @@
     </main>
 
     <script>
-      const endpoint = "https://script.google.com/macros/s/AKfycbzolWV8VpE5LfXOG4tKWnxGYr6f_4LCFc5hS0_pHrtTY0prmUjcb2RUQlUHNcThx3FE/exec"; // fx https://script.google.com/macros/s/AKfycb.../exec
-      const msg = document.getElementById("msg");
-      const show = (t, ok=true) => msg.innerHTML = `<div class="${ok?'ok':'err'} msg">${t}</div>`;
+const endpoint = "https://script.google.com/macros/s/AKfycbzolWV8VpE5LfXOG4tKWnxGYr6f_4LCFc5hS0_pHrtTY0prmUjcb2RUQlUHNcThx3FE/exec";
 
-      async function send(action) {
-        const data = {
-          A_turNr: document.getElementById("turNr").value,
-          A_by: document.getElementById("by").value,
-          C: document.getElementById("C").value,
-          D: document.getElementById("D").value,
-          E: document.getElementById("E").value,
-          F: document.getElementById("F").value,
-          G: document.getElementById("G").value,
-          H: document.getElementById("H").value,
-          action
-        };
-        try {
-          const res = await fetch(endpoint, {
-            method: "POST",
-            mode: "cors",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify(data)
-          });
-          const text = await res.text();
-          show("✅ Data sendt!", true);
-        } catch(err) {
-          show("❌ Fejl: " + err.message, false);
-        }
-      }
+async function send(action) {
+  const payload = {
+    A_turNr: document.getElementById("turNr").value,
+    A_by:    document.getElementById("by").value,
+    C:       document.getElementById("C").value,
+    D:       document.getElementById("D").value,
+    E:       document.getElementById("E").value,
+    F:       document.getElementById("F").value,
+    G:       document.getElementById("G").value,
+    H:       document.getElementById("H").value,
+    action
+  };
 
-      document.getElementById("btn").onclick = () => send("gem");
-      document.getElementById("finishBtn").onclick = () => send("afslut");
-      document.getElementById("resetBtn").onclick = () => send("nulstil");
-    </script>
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // <- vigtigt!
+      body: JSON.stringify(payload)
+    });
+
+    // læs svar
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = { ok:false, message:text }; }
+
+    alert(data.message || text);
+    console.log("✅ Svar fra server:", data);
+
+  } catch (err) {
+    alert("❌ Netværksfejl: " + err.message);
+    console.error(err);
+  }
+}
+
+// Forbind knapper
+document.getElementById("btn").onclick = () => send("gem");
+document.getElementById("finishBtn").onclick = () => send("afslut");
+document.getElementById("resetBtn").onclick = () => send("nulstil");
+</script>
   </body>
 
 </html>
+
 
 
 
